@@ -1,0 +1,75 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "AzureWebJobsSecretStorageType": "files",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+        
+        "_comment_Azure_OpenAI": "Azure OpenAI Configuration",
+        "AzureOpenAI:DeploymentName": "<YOUR_DEPLOYMENT_NAME>",
+        "AzureOpenAI:Endpoint": "<YOUR_AZURE_OPENAI_ENDPOINT>",
+        "AzureOpenAI:ApiKey": "<YOUR_AZURE_OPENAI_API_KEY>",
+        "AzureOpenAI:AudioEndpoint": "<YOUR_AZURE_OPENAI_AUDIO_ENDPOINT>",
+        "AzureOpenAI:AudioApiKey": "<YOUR_AZURE_OPENAI_AUDIO_API_KEY>",
+        "AZURE_OPENAI_ENDPOINT": "<YOUR_AZURE_OPENAI_ENDPOINT>",
+        "AZURE_OPENAI_API_KEY": "<YOUR_AZURE_OPENAI_API_KEY>",
+        "AZURE_OPENAI_AUDIO_ENDPOINT": "<YOUR_AZURE_OPENAI_AUDIO_ENDPOINT>",
+        "AZURE_OPENAI_AUDIO_KEY": "<YOUR_AZURE_OPENAI_AUDIO_KEY>",
+        "AZURE_OPENAI_API_VERSION": "2023-03-15-preview",
+        "AZURE_OPENAI_CHAT_DEPLOYMENT_NAME": "<YOUR_CHAT_MODEL_DEPLOYMENT>",
+        "AZURE_OPENAI_CHAT_MODEL": "<YOUR_CHAT_MODEL_NAME>",
+        "AZURE_OPENAI_MODEL_NAME": "<YOUR_MODEL_NAME>",
+        "AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME": "text-embedding-ada-002",
+        
+        "_comment_Azure_OpenAI_Image": "Azure OpenAI Image API Configuration",
+        "AZURE_OPENAI_IMAGE_ENDPOINT": "<YOUR_AZURE_OPENAI_IMAGE_ENDPOINT>",
+        "AZURE_OPENAI_IMAGE_DEPLOYMENT": "<YOUR_IMAGE_DEPLOYMENT>",
+        "OPENAI_API_VERSION": "2025-04-01-preview",
+        
+        "_comment_Azure_Speech": "Azure Speech Services Configuration",
+        "AZURE_SPEECH_KEY": "<YOUR_AZURE_SPEECH_KEY>",
+        "AZURE_SPEECH_REGION": "eastus",
+        
+        "_comment_AI_Search": "AI Search Base URL for Short Memory and other search services",
+        "AI_SEARCH_BASE_URL": "<YOUR_AI_SEARCH_BASE_URL>",
+        
+        "_comment_Cosmos_DB": "Cosmos DB Configuration - ALL FROM CONFIGURATION",
+        "COSMOS_ACCOUNT_NAME": "<YOUR_COSMOS_ACCOUNT>",
+        "COSMOS_DATABASE_NAME": "<YOUR_DATABASE_NAME>",
+        "COSMOS_CONTAINER_NAME": "<YOUR_CONTAINER_NAME>",
+        "COSMOS_CONVERSATIONS_CONTAINER_NAME": "<YOUR_CONVERSATIONS_CONTAINER>",
+        "COSMOS_PARTITION_KEY": "<YOUR_PARTITION_KEY>",
+        "COSMOS_ENDPOINT": "<YOUR_COSMOS_ENDPOINT>",
+        "COSMOS_KEY": "<YOUR_COSMOS_KEY>",
+        
+        "_comment_MiCasa_Cosmos_DB": "MiCasa Cosmos DB Configuration",
+        "MICASA_COSMOS_ENDPOINT": "<YOUR_MICASA_COSMOS_ENDPOINT>",
+        "MICASA_COSMOS_KEY": "<YOUR_MICASA_COSMOS_KEY>",
+        
+        "_comment_Azure_AI_Search": "Azure AI Search Configuration for Document Search",
+        "AZURE_SEARCH_ENDPOINT": "<YOUR_AI_SEARCH_ENDPOINT>",
+        "AZURE_SEARCH_API_KEY": "<YOUR_AI_SEARCH_API_KEY>",
+        
+        "_comment_Azure_Storage": "Azure Storage Configuration",
+        "AZURE_STORAGE_ACCOUNT_NAME": "<YOUR_STORAGE_ACCOUNT>",
+        "AZURE_STORAGE_ACCOUNT_KEY": "<YOUR_STORAGE_KEY>",
+        "AzureStorage:AccountName": "<YOUR_STORAGE_ACCOUNT>",
+        "AzureStorage:AccountKey": "<YOUR_STORAGE_KEY>",
+        
+        "_comment_Document_Intelligence": "Azure Document Intelligence Configuration",
+        "DocumentIntelligence:Endpoint": "<YOUR_DOC_INTELLIGENCE_ENDPOINT>",
+        "DocumentIntelligence:ApiKey": "<YOUR_DOC_INTELLIGENCE_KEY>",
+        "AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT": "<YOUR_DOC_INTELLIGENCE_ENDPOINT>",
+        "AZURE_DOCUMENT_INTELLIGENCE_KEY": "<YOUR_DOC_INTELLIGENCE_KEY>",
+        
+        "_comment_AI_Foundry": "Azure AI Foundry Configuration",
+        "PROJECT_CONNECTION_STRING": "<YOUR_AI_FOUNDRY_CONNECTION>",
+        "AZURE_AI_FOUNDRY_PROJECT_NAME": "<YOUR_PROJECT_NAME>",
+        "AZURE_AI_FOUNDRY_SUBSCRIPTION_ID": "<YOUR_SUBSCRIPTION_ID>",
+        "AZURE_AI_FOUNDRY_RESOURCE_GROUP": "<YOUR_RESOURCE_GROUP>",
+        "AZURE_AI_FOUNDRY_KEY": "<YOUR_AI_FOUNDRY_KEY>",
+        
+        "_comment_HomeDesigns_AI": "HomeDesigns.ai API Configuration for House Redesign",
+        "HOMEDESIGNS_AI_TOKEN": "<YOUR_HOMEDESIGNS_TOKEN>"
+    }
+}

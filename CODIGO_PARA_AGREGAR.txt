@@ -1,0 +1,88 @@
+// =====================================================================
+// PASO 1: Agregar este MÉTODO después de la línea 867 (después del método Dispose())
+// =====================================================================
+
+        /// <summary>
+        /// Retrieves a specific property by its ID from a client document
+        /// Uses Cosmos DB JOIN to unnest the propiedad array and filter by property ID
+        /// </summary>
+        /// <param name="clientId">The client document ID</param>
+        /// <param name="propiedadId">The property ID to search for within the client's propiedad array</param>
+        /// <returns>GetPropertyByIdResult containing the property data if found</returns>
+        public async Task<GetPropertyByIdResult> GetPropertyByIdAsync(string clientId, string propiedadId)
+        {
+            if (string.IsNullOrEmpty(clientId))
+                return new GetPropertyByIdResult { Success = false, ErrorMessage = "Client ID cannot be null or empty", Propiedad = null };
+
+            if (string.IsNullOrEmpty(propiedadId))
+                return new GetPropertyByIdResult { Success = false, ErrorMessage = "Property ID cannot be null or empty", Propiedad = null };
+
+            try
+            {
+                await InitializeCosmosClientAsync();
+                var container = _cosmosClient.GetContainer(_databaseName, _containerName);
+
+                string query = "SELECT p FROM c JOIN p IN c.propiedad WHERE c.id = @clientId AND p.id = @propiedadId";
+                var queryDefinition = new QueryDefinition(query)
+                    .WithParameter("@clientId", clientId)
+                    .WithParameter("@propiedadId", propiedadId);
+
+                using FeedIterator<dynamic> feed = container.GetItemQueryIterator<dynamic>(queryDefinition);
+
+                LibModels.Propiedad propiedad = null;
+                double totalRU = 0;
+
+                while (feed.HasMoreResults)
+                {
+                    FeedResponse<dynamic> response = await feed.ReadNextAsync();
+                    totalRU += response.RequestCharge;
+
+                    if (response.Count > 0)
+                    {
+                        var item = response.FirstOrDefault();
+                        if (item != null)
+                        {
+                            string propiedadJson = JsonConvert.SerializeObject(item.p);
+                            propiedad = JsonConvert.DeserializeObject<LibModels.Propiedad>(propiedadJson);
+                            break;
+                        }
+                    }
+                }
+
+                if (propiedad == null)
+                {
+                    Console.WriteLine($"?? Property not found: clientId={clientId}, propiedadId={propiedadId}");
+                    return new GetPropertyByIdResult { Success = false, ErrorMessage = $"Property with ID '{propiedadId}' not found in client '{clientId}'", Propiedad = null };
+                }
+
+                Console.WriteLine($"? Retrieved property: clientId={clientId}, propiedadId={propiedadId}. RU consumed: {totalRU:F2}");
+                return new GetPropertyByIdResult { Success = true, ClientId = clientId, Propiedad = propiedad, RUConsumed = totalRU, Timestamp = DateTime.UtcNow };
+            }
+            catch (CosmosException cosmosEx)
+            {
+                Console.WriteLine($"? Cosmos DB error: {cosmosEx.Message} (Status: {cosmosEx.StatusCode})");
+                return new GetPropertyByIdResult { Success = false, ErrorMessage = $"Cosmos DB error: {cosmosEx.Message}", Propiedad = null };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"? Error retrieving property: {ex.Message}");
+                return new GetPropertyByIdResult { Success = false, ErrorMessage = ex.Message, Propiedad = null };
+            }
+        }
+
+// =====================================================================
+// PASO 2: Agregar esta CLASE antes de #endregion (después de UpdatePropiedadResult)
+// =====================================================================
+
+    /// <summary>
+    /// Result of retrieving a specific property by ID from a client document
+    /// </summary>
+    public class GetPropertyByIdResult
+    {
+        public bool Success { get; set; }
+        public string ErrorMessage { get; set; } = "";
+        public string ClientId { get; set; } = "";
+        public LibModels.Propiedad? Propiedad { get; set; }
+        public double RUConsumed { get; set; }
+        public DateTime Timestamp { get; set; }
+    }

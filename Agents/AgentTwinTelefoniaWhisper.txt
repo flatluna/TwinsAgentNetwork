@@ -1,0 +1,82 @@
+// Agregar al inicio del archivo (usings):
+using Azure.AI.OpenAI;
+using Azure.Identity;
+
+// Agregar este método a la clase AgentTwinTelefonia:
+
+/// <summary>
+/// Transcribe usando Azure OpenAI Whisper API
+/// Alternativa más precisa que Azure Speech SDK
+/// </summary>
+public async Task<VoiceTranscriptionResult> TranscribeWithWhisperAsync(
+    byte[] audioBytes,
+    string language = "es-MX")
+{
+    var startTime = DateTime.UtcNow;
+
+    _logger.LogInformation("?? Starting Whisper transcription. Audio size: {Size} bytes", audioBytes.Length);
+
+    try
+    {
+        if (audioBytes == null || audioBytes.Length == 0)
+        {
+            return new VoiceTranscriptionResult
+            {
+                Success = false,
+                ErrorMessage = "Audio bytes cannot be null or empty",
+                TranscribedText = string.Empty,
+                ProcessedAt = DateTime.UtcNow
+            };
+        }
+
+        string endpoint = _configuration["AZURE_OPENAI_ENDPOINT"] ?? 
+                        Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? 
+                        "https://flatbitai.openai.azure.com/";
+
+        string deploymentName = "whisper";
+
+        var openAIClient = new AzureOpenAIClient(
+            new Uri(endpoint), 
+            new DefaultAzureCredential());
+
+        var audioClient = openAIClient.GetAudioClient(deploymentName);
+
+        string tempFile = Path.GetTempFileName() + ".wav";
+        await File.WriteAllBytesAsync(tempFile, audioBytes);
+
+        var result = await audioClient.TranscribeAudioAsync(tempFile);
+
+        File.Delete(tempFile);
+
+        var processingTime = (DateTime.UtcNow - startTime).TotalSeconds;
+
+        string transcribedText = result.Value.Text;
+
+        _logger.LogInformation("? Whisper SUCCESS in {Time}s", processingTime);
+        _logger.LogInformation("?? Text: {Text}", transcribedText);
+
+        return new VoiceTranscriptionResult
+        {
+            Success = true,
+            TranscribedText = transcribedText,
+            Confidence = 0.98,
+            DurationSeconds = processingTime,
+            AudioSizeBytes = audioBytes.Length,
+            Language = language,
+            ProcessedAt = DateTime.UtcNow
+        };
+    }
+    catch (Exception ex)
+    {
+        var processingTime = (DateTime.UtcNow - startTime).TotalSeconds;
+        _logger.LogError(ex, "? Whisper exception after {Time}s", processingTime);
+
+        return new VoiceTranscriptionResult
+        {
+            Success = false,
+            ErrorMessage = $"Whisper error: {ex.Message}",
+            TranscribedText = string.Empty,
+            ProcessedAt = DateTime.UtcNow
+        };
+    }
+}
